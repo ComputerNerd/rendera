@@ -399,7 +399,7 @@ namespace Scale
   }
 }
 
-namespace Rotate
+namespace RotateArbitrary
 {
   namespace Items
   {
@@ -583,7 +583,7 @@ namespace Rotate
   {
     int y1 = 8;
 
-    Items::dialog = new DialogWindow(256, 0, "Rotate Image");
+    Items::dialog = new DialogWindow(256, 0, "Arbitrary Rotation");
     Items::angle = new InputFloat(Items::dialog, 0, y1, 96, 24, "Angle:", 0, -359.99, 359.99);
     Items::angle->center();
     y1 += 24 + 8;
@@ -607,7 +607,7 @@ void Transform::init()
 {
   Resize::init();
   Scale::init();
-  Rotate::init();
+  RotateArbitrary::init();
 }
 
 void Transform::flipHorizontal()
@@ -636,8 +636,24 @@ void Transform::scale()
   Scale::begin();
 }
 
-void Transform::rotate()
+void Transform::rotateArbitrary()
 {
-  Rotate::begin();
+  RotateArbitrary::begin();
+}
+
+void Transform::rotate90()
+{
+  pushUndo();
+  Project::bmp->rotate90();
+  Gui::getView()->ignore_tool = true;
+  Gui::getView()->drawMain(true);
+}
+
+void Transform::rotate180()
+{
+  pushUndo();
+  Project::bmp->rotate180();
+  Gui::getView()->ignore_tool = true;
+  Gui::getView()->drawMain(true);
 }
 

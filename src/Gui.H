@@ -76,6 +76,8 @@ namespace Gui
   void checkSelectionSelect();
   void checkSelectionFlipHorizontal();
   void checkSelectionFlipVertical();
+  void checkSelectionRotate90();
+  void checkSelectionRotate180();
   void checkSelectionReset();
   void checkSelectionValues(int, int, int, int);
   void checkOffsetValues(int, int);

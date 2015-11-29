@@ -266,6 +266,8 @@ public:
             if(ctrl)
               Dialog::editor();
             break;
+          case 'r':
+            break;
         }
 
         return 1;
@@ -318,13 +320,21 @@ void Gui::init()
     (Fl_Callback *)Transform::resize, 0, 0);
   menubar->add("&Image/Scale...", 0,
     (Fl_Callback *)Transform::scale, 0, 0);
-  menubar->add("&Image/Rotate...", 0,
-    (Fl_Callback *)Transform::rotate, 0, 0);
+  menubar->add("&Image/Rotate/90 Degrees", 0,
+    (Fl_Callback *)Transform::rotate90, 0, 0);
+  menubar->add("&Image/Rotate/180 Degrees", 0,
+    (Fl_Callback *)Transform::rotate180, 0, 0);
+  menubar->add("&Image/Rotate/Arbitrary...", 0,
+    (Fl_Callback *)Transform::rotateArbitrary, 0, 0);
 
   menubar->add("&Selection/Flip &Horizontal", 0,
     (Fl_Callback *)checkSelectionFlipHorizontal, 0, 0);
   menubar->add("&Selection/Flip &Vertical", 0,
     (Fl_Callback *)checkSelectionFlipVertical, 0, 0);
+  menubar->add("&Selection/Rotate/90 Degrees", 0,
+    (Fl_Callback *)checkSelectionRotate90, 0, 0);
+  menubar->add("&Selection/Rotate/180 Degrees", 0,
+    (Fl_Callback *)checkSelectionRotate180, 0, 0);
 
   menubar->add("&Palette/&Open...", 0,
     (Fl_Callback *)File::loadPalette, 0, 0);
@@ -1271,6 +1281,16 @@ void Gui::checkSelectionFlipHorizontal()
 void Gui::checkSelectionFlipVertical()
 {
   Project::select_bmp->flipVertical();
+}
+
+void Gui::checkSelectionRotate90()
+{
+  Project::select_bmp->rotate90();
+}
+
+void Gui::checkSelectionRotate180()
+{
+  Project::select_bmp->rotate180();
 }
 
 void Gui::checkSelectionReset()

@@ -899,9 +899,9 @@ void Bitmap::pointStretch(Bitmap *dest,
 
 void Bitmap::flipHorizontal()
 {
-  for(int y = ct; y <= cb; y++)
+  for(int y = 0; y < h; y++)
   {
-    for(int x = cl; x < w / 2; x++)
+    for(int x = 0; x < w / 2; x++)
     {
       const int temp = *(row[y] + x);
       *(row[y] + x) = *(row[y] + w - 1 - x);
@@ -912,14 +912,59 @@ void Bitmap::flipHorizontal()
 
 void Bitmap::flipVertical()
 {
-  for(int y = ct; y < h / 2; y++)
+  for(int y = 0; y < h / 2; y++)
   {
-    for(int x = cl; x <= cr; x++)
+    for(int x = 0; x < w; x++)
     {
       const int temp = *(row[y] + x);
       *(row[y] + x) = *(row[h - 1 - y] + x);
       *(row[h - 1 - y] + x) = temp;
     }
+  }
+}
+
+void Bitmap::rotate90()
+{
+  // make copy
+  Bitmap temp(w, h);
+  blit(&temp, 0, 0, 0, 0, w, h);
+
+  // re-allocate bitmap
+  delete[] row;
+  delete[] data;
+  data = new int [h * w];
+  row = new int *[w];
+
+  for(int i = 0; i < w; i++)
+    row[i] = &data[h * i];
+
+  // rotate
+  int *p = &temp.data[0];
+
+  for(int yy = 0; yy < h; yy++)
+  {
+    for(int xx = 0; xx < w; xx++)
+    {
+      *(row[xx] + h - 1 - yy) = *p++;
+    }
+  }
+
+  // fix stuff
+  int tempw = w;
+  w = h;
+  h = tempw;
+  setClip(overscroll, overscroll, w - overscroll - 1, h - overscroll - 1);
+}
+
+void Bitmap::rotate180()
+{
+  const int size = w * h;
+
+  for(int i = 0; i < size / 2; i++)
+  {
+    int temp = data[i];
+    data[i] = data[size - 1 - i];
+    data[size - 1 - i] = temp;
   }
 }
 
