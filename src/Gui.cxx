@@ -267,6 +267,8 @@ public:
               Dialog::editor();
             break;
           case 'r':
+            Project::select_bmp->rotate90();
+            Project::tool->redraw(Gui::getView());
             break;
         }
 
@@ -331,7 +333,7 @@ void Gui::init()
     (Fl_Callback *)checkSelectionFlipHorizontal, 0, 0);
   menubar->add("&Selection/Flip &Vertical", 0,
     (Fl_Callback *)checkSelectionFlipVertical, 0, 0);
-  menubar->add("&Selection/Rotate/90 Degrees", 0,
+  menubar->add("&Selection/Rotate/90 Degrees (R)", 0,
     (Fl_Callback *)checkSelectionRotate90, 0, 0);
   menubar->add("&Selection/Rotate/180 Degrees", 0,
     (Fl_Callback *)checkSelectionRotate180, 0, 0);
