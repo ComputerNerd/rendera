@@ -133,7 +133,6 @@ namespace Resize
 
     Gui::getView()->ox = 0;
     Gui::getView()->oy = 0;
-    Gui::getView()->zoomFit(0);
     Gui::getView()->drawMain(true);
   }
 
@@ -301,7 +300,6 @@ namespace Scale
 
     Gui::getView()->ox = 0;
     Gui::getView()->oy = 0;
-    Gui::getView()->zoomFit(0);
     Gui::getView()->drawMain(true);
   }
 
@@ -553,15 +551,11 @@ namespace RotateArbitrary
 
     Gui::getView()->ox = 0;
     Gui::getView()->oy = 0;
-    Gui::getView()->zoomFit(0);
     Gui::getView()->drawMain(true);
 }
 
   void begin()
   {
-    char s[8];
-    snprintf(s, sizeof(s), "0");
-    Items::angle->value(s);
     Items::dialog->show();
   }
 
@@ -588,7 +582,7 @@ namespace RotateArbitrary
     Items::angle->center();
     y1 += 24 + 8;
     Items::angle->value("0");
-    Items::scale = new InputFloat(Items::dialog, 0, y1, 96, 24, "Scale:", 0, 0.1, 10.0);
+    Items::scale = new InputFloat(Items::dialog, 0, y1, 96, 24, "Scale:", 0, 0.1, 4.0);
     Items::scale->center();
     y1 += 24 + 8;
     Items::scale->value("1.0");
