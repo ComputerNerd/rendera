@@ -51,8 +51,8 @@ namespace
     snprintf(str, sizeof(str), "%d", val);
     i->input.value(str);
 
-    if(i->cb)
-      i->cb(w, i);
+    if(i->callback())
+      i->do_callback();
   }
 }
 
@@ -69,7 +69,7 @@ InputInt::InputInt(Fl_Group *g, int x, int y, int w, int h,
   align(FL_ALIGN_LEFT);
   group = g;
   var = 0;
-  cb = input_cb;
+  callback(input_cb);
   input.callback((Fl_Callback *)change, this);
   dec.callback((Fl_Callback *)change, this);
   inc.callback((Fl_Callback *)change, this);

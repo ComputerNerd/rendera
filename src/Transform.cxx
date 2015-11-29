@@ -161,6 +161,7 @@ namespace Resize
     Items::keep_aspect = new CheckBox(Items::dialog, 0, y1, 16, 16, "Keep Aspect", 0);
     Items::keep_aspect->callback((Fl_Callback *)checkKeepAspect);
     Items::keep_aspect->center();
+    Items::keep_aspect->value(1);
     y1 += 16 + 8;
     Items::keep_aspect->value();
     Items::dialog->addOkCancelButtons(&Items::ok, &Items::cancel, &y1);
@@ -386,6 +387,7 @@ namespace Scale
     Items::keep_aspect->callback((Fl_Callback *)checkKeepAspect);
     y1 += 16 + 8;
     Items::keep_aspect->center();
+    Items::keep_aspect->value(1);
     Items::wrap = new CheckBox(Items::dialog, 0, y1, 16, 16, "Wrap Edges", 0);
     y1 += 16 + 8;
     Items::wrap->center();
