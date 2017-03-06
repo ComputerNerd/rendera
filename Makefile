@@ -19,7 +19,7 @@ LIBS=$(shell ./fltk-1.3.3/fltk-config --use-images --ldstaticflags)
 ifeq ($(PLATFORM),linux)
   HOST=
   CXX=g++
-  CXXFLAGS=-O3 -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
+  CXXFLAGS= -O3 -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
   EXE=rendera
 endif
 
@@ -85,7 +85,7 @@ fltk:
 	@cd ./fltk-1.3.3; \
 	make clean; \
 	./configure --host=$(HOST) --enable-localjpeg --enable-localzlib --enable-localpng --disable-xdbe; \
-	make; \
+	make -j20; \
 	cd ..
 	@echo "FLTK libs built!"
 
