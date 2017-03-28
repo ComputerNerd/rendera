@@ -62,6 +62,7 @@ namespace
 
 namespace Normalize
 {
+/*
   static char *font[] =
   {
     "01110",
@@ -244,8 +245,8 @@ namespace Normalize
       }
     }
   }
+*/
 
-/*
   void apply()
   {
     // search for highest & lowest RGB values
@@ -316,7 +317,6 @@ namespace Normalize
 
     Gui::hideProgress();
   }
-*/
 
   void begin()
   {
