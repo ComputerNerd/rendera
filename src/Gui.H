@@ -88,6 +88,7 @@ namespace Gui
   void paletteSort();
   void paletteSort();
   void paletteDefault();
+  void paletteGrays();
   void paletteBlackAndWhite();
   void paletteWebSafe();
   void palette3LevelRGB();
