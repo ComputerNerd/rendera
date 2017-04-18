@@ -348,6 +348,8 @@ void Gui::init()
     (Fl_Callback *)FX::ditherImage, 0, FL_MENU_DIVIDER);
   menubar->add("&Palette/Presets/Default", 0,
     (Fl_Callback *)paletteDefault, 0, 0);
+  menubar->add("&Palette/Presets/Grays", 0,
+    (Fl_Callback *)paletteGrays, 0, 0);
   menubar->add("Palette/Presets/Black and White", 0,
     (Fl_Callback *)paletteBlackAndWhite, 0, 0);
   menubar->add("&Palette/Presets/Web Safe", 0,
@@ -1362,6 +1364,12 @@ const char *Gui::getTextInput()
 void Gui::paletteDefault()
 {
   Project::palette->setDefault();
+  Project::palette->draw(palette_swatches);
+}
+
+void Gui::paletteGrays()
+{
+  Project::palette->setGrays();
   Project::palette->draw(palette_swatches);
 }
 

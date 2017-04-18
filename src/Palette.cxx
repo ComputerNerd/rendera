@@ -298,6 +298,21 @@ void Palette::setDefault()
   fillTable();
 }
 
+void Palette::setGrays()
+{
+  int index = 0;
+
+  for(int i = 0; i < 16; i++)
+  {
+    const int c = makeRgb(i * 17, i * 17, i * 17);
+
+    data[index++] = c;
+  }
+
+  max = index;
+  fillTable();
+}
+
 void Palette::setBlackAndWhite()
 {
   data[0] = makeRgb(0, 0, 0);
