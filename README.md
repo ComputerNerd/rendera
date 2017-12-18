@@ -1,7 +1,7 @@
 Rendera
 =======
 
-![Screenshot](https://raw.githubusercontent.com/Mortis69/rendera/master/screenshots/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/JoeDavisson/rendera/master/screenshots/screenshot.png)
 
 Rendera is a painting program suitable for photo-retouching and making seamless
 textures. Originally for Windows, it has been rewritten from scratch using
@@ -9,7 +9,7 @@ C++/FLTK. Please see the Wiki for a list of features, and the credits file for a
 list of contributors and contact info.
 
 ## Build it from source
-```$ git clone https://github.com/Mortis69/rendera.git```
+```$ git clone https://github.com/JoeDavisson/rendera.git```
 
 ```$ cd rendera```
 
