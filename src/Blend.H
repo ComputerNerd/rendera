@@ -37,7 +37,11 @@ namespace Blend
     SMOOTH,
     SMOOTH_COLOR,
     SMOOTH_LUMINOSITY,
-    SHARPEN
+    SHARPEN,
+    HIGHLIGHT,
+    SHADOW,
+    SATURATE,
+    DESATURATE
   };
  
   void set(const int &);
@@ -56,7 +60,11 @@ namespace Blend
   int smoothColor(const int &, const int &, const int &);
   int smoothLuminosity(const int &, const int &, const int &);
   int sharpen(const int &, const int &, const int &);
+  int highlight(const int &, const int &, const int &);
+  int shadow(const int &, const int &, const int &);
   int invert(const int &, const int &, const int &);
+  int saturate(const int &, const int &, const int &);
+  int desaturate(const int &, const int &, const int &);
   void rgbToHsv(const int &, const int &, const int &, int *, int *, int *);
   void hsvToRgb(const int &, const int &, const int &, int *, int *, int *);
 }

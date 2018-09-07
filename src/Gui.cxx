@@ -748,6 +748,10 @@ void Gui::init()
   blend->add("Smooth (Color)");
   blend->add("Smooth (Luminosity)");
   blend->add("Sharpen");
+  blend->add("Highlight");
+  blend->add("Shadow");
+  blend->add("Saturate");
+  blend->add("Desaturate");
   blend->value(0);
   blend->callback((Fl_Callback *)checkBlend);
   pos += 24 + 8;

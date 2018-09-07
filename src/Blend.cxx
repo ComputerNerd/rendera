@@ -70,6 +70,18 @@ void Blend::set(const int &mode)
     case SHARPEN:
       current_blend = sharpen;
       break;
+    case HIGHLIGHT:
+      current_blend = highlight;
+      break;
+    case SHADOW:
+      current_blend = shadow;
+      break;
+    case SATURATE:
+      current_blend = saturate;
+      break;
+    case DESATURATE:
+      current_blend = desaturate;
+      break;
     default:
       current_blend = trans;
       break;
@@ -310,6 +322,44 @@ int Blend::sharpen(const int &c1, const int &, const int &t)
   lum = clamp(lum, 255);
 
   return Blend::trans(c1, keepLum(c1, lum), 255 - (255 - t) / 16);
+}
+
+int Blend::highlight(const int &c1, const int &c2, const int &t)
+{
+  return lighten(c1, bmp->getpixel(xpos, ypos), t);
+}
+
+int Blend::shadow(const int &c1, const int &c2, const int &t)
+{
+  return darken(c1, bmp->getpixel(xpos, ypos), t);
+}
+
+int Blend::saturate(const int &c1, const int &c2, const int &t)
+{
+  int r, g, b;
+  int h = 0, s = 0, v = 0;
+  const rgba_type rgba = getRgba(c1);
+
+  rgbToHsv(rgba.r, rgba.g, rgba.b, &h, &s, &v);
+  s += (255 - t);
+  s = std::min(s, 255);
+  hsvToRgb(h, s, v, &r, &g, &b);
+
+  return makeRgba(r, g, b, rgba.a);
+}
+
+int Blend::desaturate(const int &c1, const int &c2, const int &t)
+{
+  int r, g, b;
+  int h = 0, s = 0, v = 0;
+  const rgba_type rgba = getRgba(c1);
+
+  rgbToHsv(rgba.r, rgba.g, rgba.b, &h, &s, &v);
+  s -= (255 - t);
+  s = std::max(s, 0);
+  hsvToRgb(h, s, v, &r, &g, &b);
+
+  return makeRgba(r, g, b, rgba.a);
 }
 
 int Blend::invert(const int &c1, const int &, const int &)
