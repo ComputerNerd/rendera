@@ -49,8 +49,11 @@ void Blend::set(const int &mode)
     case LIGHTEN:
       current_blend = lighten;
       break;
-    case COLORIZE:
-      current_blend = colorize;
+    case COLORIZE_LUMINOSITY:
+      current_blend = colorizeLuminosity;
+      break;
+    case COLORIZE_VALUE:
+      current_blend = colorizeValue;
       break;
     case ALPHA_ADD:
       current_blend = alphaAdd;
@@ -166,11 +169,18 @@ int Blend::lighten(const int &c1, const int &c2, const int &t)
   return makeRgba(r, g, b, rgba1.a);
 }
 
-int Blend::colorize(const int &c1, const int &c2, const int &t)
+int Blend::colorizeLuminosity(const int &c1, const int &c2, const int &t)
 {
   int c3 = transNoAlpha(c1, c2, t);
 
   return keepLum(c3, getl(c1));
+}
+
+int Blend::colorizeValue(const int &c1, const int &c2, const int &t)
+{
+  int c3 = transNoAlpha(c1, c2, t);
+
+  return keepVal(c3, getv(c1));
 }
 
 int Blend::keepLum(const int &c, const int &dest)
@@ -219,6 +229,53 @@ int Blend::keepLum(const int &c, const int &dest)
   }
 
   return makeRgba(n[1], n[0], n[2], rgba.a);
+}
+
+int Blend::keepVal(const int &c, const int &dest)
+{
+  const rgba_type rgba = getRgba(c);
+  int n[3];
+  n[0] = rgba.r;
+  n[1] = rgba.g;
+  n[2] = rgba.b;
+
+  // iterate to find similar color with same luminosity
+  int src = getvUnpacked(n[0], n[1], n[2]);
+  int count = 0;
+
+  while(src < dest && count < 256)
+  {
+    for(int i = 0; i < 3; i++)
+    {
+      if(n[i] < 255)
+      {
+        n[i]++;
+        src = getvUnpacked(n[0], n[1], n[2]);
+        if(src >= dest)
+          break;
+      }
+    }
+
+    count++;
+  }
+
+  while(src > dest && count < 256)
+  {
+    for(int i = 0; i < 3; i++)
+    {
+      if(n[i] > 0)
+      {
+        n[i]--;
+        src = getvUnpacked(n[0], n[1], n[2]);
+        if(src <= dest)
+          break;
+      }
+    }
+
+    count++;
+  }
+
+  return makeRgba(n[0], n[1], n[2], rgba.a);
 }
 
 int Blend::alphaSub(const int &c1, const int &, const int &t)

@@ -125,6 +125,12 @@ inline int getlUnpacked(const int &r, const int &g, const int &b)
   return (76 * r + 150 * g + 29 * b) / 255;
 }
 
+// get unpacked value
+inline int getvUnpacked(const int &r, const int &g, const int &b)
+{
+  return (r + g + b) / 3;
+}
+
 // scales a gray value to a particular level
 inline int scaleVal(const int &a, const int &b)
 {

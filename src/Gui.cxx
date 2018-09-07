@@ -741,7 +741,8 @@ void Gui::init()
   blend->add("Normal");
   blend->add("Darken");
   blend->add("Lighten");
-  blend->add("Colorize");
+  blend->add("Colorize (Luminosity)");
+  blend->add("Colorize (Value)");
   blend->add("Alpha Add");
   blend->add("Alpha Subtract");
   blend->add("Smooth");

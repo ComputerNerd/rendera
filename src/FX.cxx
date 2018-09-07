@@ -1539,7 +1539,7 @@ namespace Colorize
         Blend::rgbToHsv(r, g, b, &h, &s, &v);
         Blend::hsvToRgb(h, (sat * s) / (sat + s), v, &r, &g, &b);
 
-        *p = Blend::colorize(*p, makeRgba(r, g, b, rgba.a), 0);
+        *p = Blend::colorizeLuminosity(*p, makeRgba(r, g, b, rgba.a), 0);
       }
 
       if(Gui::updateProgress(y) < 0)

@@ -31,7 +31,8 @@ namespace Blend
     TRANS,
     DARKEN,
     LIGHTEN,
-    COLORIZE,
+    COLORIZE_LUMINOSITY,
+    COLORIZE_VALUE,
     ALPHA_ADD,
     ALPHA_SUB,
     SMOOTH,
@@ -52,8 +53,10 @@ namespace Blend
   int trans(const int &, const int &, const int &);
   int darken(const int &, const int &, const int &);
   int lighten(const int &, const int &, const int &);
-  int colorize(const int &, const int &, const int &);
+  int colorizeLuminosity(const int &, const int &, const int &);
+  int colorizeValue(const int &, const int &, const int &);
   int keepLum(const int &, const int &);
+  int keepVal(const int &, const int &);
   int alphaAdd(const int &, const int &, const int &);
   int alphaSub(const int &, const int &, const int &);
   int smooth(const int &, const int &, const int &);
