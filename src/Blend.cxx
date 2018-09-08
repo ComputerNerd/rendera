@@ -398,7 +398,7 @@ int Blend::saturate(const int &c1, const int &c2, const int &t)
   const rgba_type rgba = getRgba(c1);
 
   rgbToHsv(rgba.r, rgba.g, rgba.b, &h, &s, &v);
-  s += (255 - t);
+  s += std::sqrt(255 - t);
   s = std::min(s, 255);
   hsvToRgb(h, s, v, &r, &g, &b);
 
@@ -412,7 +412,7 @@ int Blend::desaturate(const int &c1, const int &c2, const int &t)
   const rgba_type rgba = getRgba(c1);
 
   rgbToHsv(rgba.r, rgba.g, rgba.b, &h, &s, &v);
-  s -= (255 - t);
+  s -= std::sqrt(255 - t);
   s = std::max(s, 0);
   hsvToRgb(h, s, v, &r, &g, &b);
 
