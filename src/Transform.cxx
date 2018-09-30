@@ -641,6 +641,31 @@ void Transform::rotate90()
 {
   pushUndo();
   Project::bmp->rotate90();
+
+  if(Project::map)
+    delete(Project::map);
+
+  Project::map = new Map(Project::bmp->w, Project::bmp->h);
+  Project::map->clear(0);
+  int ox = Gui::getView()->ox;
+  int oy = Gui::getView()->oy;
+
+  if(ox < 0)
+    ox = 0;
+  if(ox > Project::bmp->w - 1)
+    ox = Project::bmp->w - 1;
+  if(oy < 0)
+    oy = 0;
+  if(oy > Project::bmp->h - 1)
+    oy = Project::bmp->h - 1;
+  
+  Gui::getView()->ox = ox; 
+  Gui::getView()->oy = oy;
+
+//FIXME this is a temporary hack until i can figure it out
+  pushUndo();
+  Undo::pop();
+
   Gui::getView()->ignore_tool = true;
   Gui::getView()->drawMain(true);
 }

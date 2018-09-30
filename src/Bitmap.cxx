@@ -925,34 +925,25 @@ void Bitmap::flipVertical()
 
 void Bitmap::rotate90()
 {
+  const int tw = w;
+  const int th = h;
+
   // make copy
-  Bitmap temp(w, h);
-  blit(&temp, 0, 0, 0, 0, w, h);
+  Bitmap temp(tw, th);
+  blit(&temp, 0, 0, 0, 0, tw, th);
 
-  // re-allocate bitmap
-  delete[] row;
-  delete[] data;
-  data = new int [h * w];
-  row = new int *[w];
+  // re-allocate a rotated bitmap
+  free(this);
+  new Bitmap(th, tw);
 
-  for(int i = 0; i < w; i++)
-    row[i] = &data[h * i];
-
-  // rotate
-  int *p = &temp.data[0];
-
-  for(int yy = 0; yy < h; yy++)
+  for(int yy = 0; yy < tw; yy++)
   {
-    for(int xx = 0; xx < w; xx++)
+    for(int xx = 0; xx < th; xx++)
     {
-      *(row[xx] + h - 1 - yy) = *p++;
+      *(row[yy] + xx) = *(temp.row[xx] + yy);
     }
   }
 
-  // fix stuff
-  int tempw = w;
-  w = h;
-  h = tempw;
   setClip(overscroll, overscroll, w - overscroll - 1, h - overscroll - 1);
 }
 
@@ -962,7 +953,7 @@ void Bitmap::rotate180()
 
   for(int i = 0; i < size / 2; i++)
   {
-    int temp = data[i];
+    const int temp = data[i];
     data[i] = data[size - 1 - i];
     data[size - 1 - i] = temp;
   }

@@ -69,7 +69,7 @@ namespace Project
 // called when the program starts
 void Project::init()
 {
-  newImage(2048, 2048);
+  newImage(1024, 768);
   setTool(Tool::PAINT);
 }
 
