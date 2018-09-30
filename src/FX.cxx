@@ -63,6 +63,8 @@ namespace
 namespace Normalize
 {
 /*
+  (ignore, temporary thing i did to generate a color chart, saving the code)
+
   static char *font[] =
   {
     "01110",
