@@ -5,8 +5,8 @@
 
 # you MUST have libxft-dev installed before compiling FLTK on linux
 # (otherwise you'll have ugly, non-resizable fonts)
-PLATFORM=linux
-#PLATFORM=mingw32
+#PLATFORM=linux
+PLATFORM=mingw32
 #PLATFORM=mingw64
 
 NAME="Rendera "
@@ -14,15 +14,14 @@ VERSION=$(shell git describe --always --dirty)
 
 SRC_DIR=src
 ifeq ($(PLATFORM),linux)
-FLTKINCDIR = /usr/include
+INCLUDE=-I$(SRC_DIR)
 else
-FLTKINCDIR = fltk-1.3.3
+INCLUDE=-I$(SRC_DIR) -Ifltk-install/include -Ifltk-install/include/FL/images
 endif
-INCLUDE=-I$(SRC_DIR) -I$(FLTKINCDIR)
 ifeq ($(PLATFORM),linux)
 	LIBS=$(shell fltk-config --use-images --ldflags)
 else
-	LIBS=$(shell ./fltk-1.3.3/fltk-config --use-images --ldstaticflags)
+	LIBS=-Lfltk-install/lib -lfltk_images_SHARED -lfltk_SHARED -lfltk_png_SHARED -lfltk_jpeg_SHARED -lfltk_z_SHARED 
 endif
 
 ifeq ($(PLATFORM),linux)
@@ -33,10 +32,11 @@ ifeq ($(PLATFORM),linux)
 endif
 
 ifeq ($(PLATFORM),mingw32)
-  HOST=i686-w64-mingw32
+  HOST=i586-w64-mingw32
   CXX=$(HOST)-g++
-  CXXFLAGS=-O3 -static-libgcc -static-libstdc++ -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
-  LIBS+=-lgdi32 -lcomctl32 -static -lpthread
+  LTOFLAGS=-Os -flto -fuse-linker-plugin -flto-partition=none
+  CXXFLAGS=$(LTOFLAGS) -fno-rtti -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
+  LIBS+=-Llibunicows/lib/mingw32 -mwindows -lunicows -lgdi32 -luuid -lole32 -lcomctl32 -lcomdlg32 $(LTOFLAGS)
   EXE=rendera.exe
 endif
 
@@ -89,14 +89,6 @@ OBJ= \
 
 default: $(OBJ)
 	$(CXX) -o ./$(EXE) $(SRC_DIR)/Main.cxx $(OBJ) $(CXXFLAGS) $(LIBS)
-
-fltk:
-	@cd ./fltk-1.3.3; \
-	make clean; \
-	./configure --host=$(HOST) --enable-localjpeg --enable-localzlib --enable-localpng --disable-xdbe; \
-	make -j20; \
-	cd ..
-	@echo "FLTK libs built!"
 
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.cxx $(SRC_DIR)/%.H
 	$(CXX) $(CXXFLAGS) -c $< -o $@
