@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #include <algorithm>
 #include <vector>
 
-#include "../fltk-1.3.3/png/png.h"
+#include <png.h>
 
 #ifdef __WIN32
 #define HAVE_BOOLEAN
@@ -34,7 +34,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #endif
 #endif
 
-#include "../fltk-1.3.3/jpeg/jpeglib.h"
+#include <jpeglib.h>
 
 // this must be included after pnglib
 #include <setjmp.h>

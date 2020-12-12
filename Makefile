@@ -13,8 +13,17 @@ NAME="Rendera "
 VERSION=$(shell git describe --always --dirty)
 
 SRC_DIR=src
-INCLUDE=-I$(SRC_DIR) -Ifltk-1.3.3
-LIBS=$(shell ./fltk-1.3.3/fltk-config --use-images --ldstaticflags)
+ifeq ($(PLATFORM),linux)
+FLTKINCDIR = /usr/include
+else
+FLTKINCDIR = fltk-1.3.3
+endif
+INCLUDE=-I$(SRC_DIR) -I$(FLTKINCDIR)
+ifeq ($(PLATFORM),linux)
+	LIBS=$(shell fltk-config --use-images --ldflags)
+else
+	LIBS=$(shell ./fltk-1.3.3/fltk-config --use-images --ldstaticflags)
+endif
 
 ifeq ($(PLATFORM),linux)
   HOST=
