@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Libunicows for Windows 9x compatibility.
+# If Windows 9x compatibility is not needed then this can be skipped.
 cd libunicows/src/
 make -f makefile.crossmingw32
+cd ../../
 
 # FLTK 1.3.x
 mkdir -p fltk-install
@@ -12,7 +14,7 @@ mkdir -p build
 cd build
 # This assumes you have FLTK 1.3 installed. If not compile FLTK for the host and specify FLUID_PATH.
 # The flto-partition option may not be needed in future versions of GCC, however with GCC 10.2 and Binutils 2.34 I sometimes receive errors while building if I don't disable LTO partitioning.
-LTO_FLAGS="-Os -flto -fuse-linker-plugin -flto-partition=none"
+LTO_FLAGS="-Os -flto -fuse-linker-plugin -flto-partition=none -Wl,--gc-sections"
 CFLAGS="-DNDEBUG"
 cmake -DOPTION_USE_GL=OFF \
 	-DOPTION_USE_SYSTEM_LIBJPEG=OFF \
@@ -42,3 +44,12 @@ make install
 
 cd ../../
 make -j16
+
+cp /usr/i586-w64-mingw32/bin/libgcc_s_dw2-1.dll .
+cp /usr/i586-w64-mingw32/bin/libstdc++-6.dll .
+cp fltk-install/bin/libfltk_png_SHARED.dll .
+cp fltk-install/bin/libfltk_jpeg_SHARED.dll .
+cp fltk-install/bin/libfltk_z_SHARED.dll .
+cp fltk-install/bin/libfltk_SHARED.dll .
+i586-w64-mingw32-strip *.exe *.dll
+7z a -t7z -m0=lzma -mx=9 -mlc=7 -mmc=1000000000 -mfb=273 -ms=on Rendera.7z libfltk_jpeg_SHARED.dll libfltk_png_SHARED.dll libfltk_SHARED.dll libfltk_z_SHARED.dll libgcc_s_dw2-1.dll libstdc++-6.dll rendera.exe
