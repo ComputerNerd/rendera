@@ -36,7 +36,7 @@ ifeq ($(PLATFORM),mingw32)
   CXX=$(HOST)-g++
   LTOFLAGS=-Os -flto -fuse-linker-plugin -flto-partition=none
   CXXFLAGS=$(LTOFLAGS) -fno-rtti -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
-  LIBS+=-Wl,--gc-sections -Llibunicows/lib/mingw32 -mwindows -lunicows -lgdi32 -luuid -lole32 -lcomctl32 -lcomdlg32 $(LTOFLAGS)
+  LIBS+=-Wl,--gc-sections -Llibunicows/lib/mingw32 -lunicows -mwindows -lgdi32 -luuid -lole32 -lcomctl32 -lcomdlg32 $(LTOFLAGS)
   EXE=rendera.exe
 endif
 
