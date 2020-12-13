@@ -21,7 +21,7 @@ endif
 ifeq ($(PLATFORM),linux)
 	LIBS=$(shell fltk-config --use-images --ldflags)
 else
-	LIBS=-Lfltk-install/lib -lfltk_images_SHARED -lfltk_SHARED -lfltk_png_SHARED -lfltk_jpeg_SHARED -lfltk_z_SHARED 
+	LIBS=-Lfltk-install/lib -lfltk_images -lfltk -lfltk_png -lfltk_jpeg -lfltk_z
 endif
 
 ifeq ($(PLATFORM),linux)
