@@ -13,7 +13,6 @@ UNICOWSLIBFOLDER=`readlink -f ./libunicows/lib/mingw32`
 mkdir -p fltk-install
 FLTKINSTALLFOLDER=`readlink -f ./fltk-install`
 cd fltk
-patch -p0 < ../removecomct32.patch
 #rm -rf build
 mkdir -p build
 cd build
@@ -54,6 +53,10 @@ cmake -DOPTION_USE_GL=OFF \
 	-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH \
 	-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
 	-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+	-DOPTION_PRINT_SUPPORT=OFF \
+	-DOPTION_USE_SVG=OFF \
+	-DOPTION_FILESYSTEM_SUPPORT=OFF \
+	-DFLTK_BUILD_TEST=OFF \
 	..
 make -j16
 make install
@@ -64,10 +67,10 @@ make -j16
 
 cp /usr/i586-w64-mingw32/bin/libgcc_s_dw2-1.dll .
 cp /usr/i586-w64-mingw32/bin/libstdc++-6.dll .
-cp fltk-install/bin/libfltk_png_SHARED.dll .
-cp fltk-install/bin/libfltk_jpeg_SHARED.dll .
-cp fltk-install/bin/libfltk_z_SHARED.dll .
-cp fltk-install/bin/libfltk_SHARED.dll .
+cp fltk-install/bin/libfltk_png.dll .
+cp fltk-install/bin/libfltk_jpeg.dll .
+cp fltk-install/bin/libfltk_z.dll .
+cp fltk-install/bin/libfltk.dll .
 i586-w64-mingw32-strip *.exe *.dll
-7z a -t7z -m0=lzma -mx=9 -mlc=7 -mmc=1000000000 -mfb=273 -ms=on Rendera.7z libfltk_jpeg_SHARED.dll libfltk_png_SHARED.dll libfltk_SHARED.dll libfltk_z_SHARED.dll libgcc_s_dw2-1.dll libstdc++-6.dll rendera.exe
-#mkisofs -o Rendera.iso ./Rendera.7z
+7z a -t7z -m0=lzma -mx=9 -mlc=7 -mmc=1000000000 -mfb=273 -ms=on Rendera.7z libfltk_jpeg.dll libfltk_png.dll libfltk.dll libfltk_z.dll libgcc_s_dw2-1.dll libstdc++-6.dll rendera.exe
+mkisofs -o Rendera.iso ./Rendera.7z
