@@ -1,7 +1,6 @@
 [submodule "fltk"]
 	path = fltk
 	url = https://github.com/fltk/fltk
-	branch = branch-1.3
 [submodule "libunicows"]
 	path = libunicows
 	url = https://github.com/ComputerNerd/Libunicows
