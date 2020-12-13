@@ -9,9 +9,11 @@ cd ../../
 UNICOWSLIBFOLDER=`readlink -f ./libunicows/lib/mingw32`
 
 # FLTK 1.3.x
+#rm -rf fltk-install
 mkdir -p fltk-install
 FLTKINSTALLFOLDER=`readlink -f ./fltk-install`
 cd fltk
+patch -p0 < ../removecomct32.patch
 #rm -rf build
 mkdir -p build
 cd build
@@ -22,7 +24,7 @@ CFLAGS="-DNDEBUG"
 UNICOWSLINK="-L$UNICOWSLIBFOLDER"
 
 LINKER_FLAGS="$LTO_FLAGS $UNICOWSLINK"
-STANDARD_LIBS=" -lunicows -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
+STANDARD_LIBS=" -lunicows -lkernel32 -luser32 -lcomctl32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
 
 cmake -DOPTION_USE_GL=OFF \
 	-DOPTION_USE_SYSTEM_LIBJPEG=OFF \
