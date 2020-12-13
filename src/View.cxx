@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #include <algorithm>
 
 #include <FL/fl_draw.H>
+#include <FL/Fl_Window.H>
+#include <FL/platform.H>
 
 #include "Bitmap.H"
 #include "Blend.H"

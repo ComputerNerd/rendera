@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #define VIEW_H
 
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_Group.H>
 
 class Bitmap;
 class Tool;
