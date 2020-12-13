@@ -21,8 +21,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #ifndef BUTTON_H
 #define BUTTON_H
 
-class Bitmap;
-class Fl_Group;
+#include <FL/Fl.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_RGB_Image.H>
+#include "Bitmap.H"
 
 class Button : public Fl_Button
 {
