@@ -935,6 +935,7 @@ void File::save(Fl_Widget *, void *)
   switch(fc.show())
   {
     case -1:
+      fl_alert("An error occurred while attempting to select a file: %s.", fc.errmsg());
     case 1:
       return;
     default:
@@ -1484,6 +1485,7 @@ void File::loadPalette()
   switch(fc.show())
   {
     case -1:
+      fl_alert("An error occurred while attempting to select a file: %s.", fc.errmsg());
     case 1:
       return;
     default:
@@ -1529,6 +1531,7 @@ void File::savePalette()
   switch(fc.show())
   {
     case -1:
+      fl_alert("An error occurred while attempting to select a file: %s.", fc.errmsg());
     case 1:
       return;
     default:
