@@ -69,5 +69,6 @@ cp fltk-install/bin/libfltk_jpeg_SHARED.dll .
 cp fltk-install/bin/libfltk_z_SHARED.dll .
 cp fltk-install/bin/libfltk_SHARED.dll .
 i586-w64-mingw32-strip *.exe *.dll
+rm Rendera.7z
 7z a -t7z -m0=lzma -mx=9 -mlc=7 -mmc=1000000000 -mfb=273 -ms=on Rendera.7z libfltk_jpeg_SHARED.dll libfltk_png_SHARED.dll libfltk_SHARED.dll libfltk_z_SHARED.dll libgcc_s_dw2-1.dll libstdc++-6.dll rendera.exe
 #mkisofs -o Rendera.iso ./Rendera.7z
