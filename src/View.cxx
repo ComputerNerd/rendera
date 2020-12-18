@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 */
 
 #include <algorithm>
+#include <cstdlib>
 
 #include <FL/fl_draw.H>
 #include <FL/Fl_Window.H>
@@ -144,6 +145,10 @@ View::View(Fl_Group *g, int x, int y, int w, int h, const char *label)
   #elif defined WIN32
     bgr_order = true;
     buffer_dc = CreateCompatibleDC(fl_gc);
+    if (buffer_dc == NULL) {
+      MessageBoxA(NULL, "CreateCompatibleDC Failed", "View::View", MB_OK | MB_ICONERROR);
+      std::exit(1);
+    }
     
     bi = new BITMAPINFO;
 
@@ -160,10 +165,18 @@ View::View(Fl_Group *g, int x, int y, int w, int h, const char *label)
 
     hbuffer = CreateDIBSection(buffer_dc, bi, DIB_RGB_COLORS,
                                (void **)&backbuf_data, 0, 0);
+    if (hbuffer == NULL) {
+      MessageBoxA(NULL, "CreateDIBSection failed", "View::View", MB_OK | MB_ICONERROR);
+      std::exit(1);
+    }
 
     backbuf = new Bitmap(Fl::w(), Fl::h(), backbuf_data);
 
-    SelectObject(buffer_dc, hbuffer);
+    HGDIOBJ selObjRes = SelectObject(buffer_dc, hbuffer);
+    if (selObjRes == NULL || selObjRes == HGDI_ERROR) {
+      MessageBoxA(NULL, "SelectObject failed.", "View::View", MB_OK | MB_ICONERROR);
+      std::exit(1);
+    }
   #else
     backbuf = new Bitmap(Fl::w(), Fl::h());
     wimage = new Fl_RGB_Image((unsigned char *)backbuf->data,
