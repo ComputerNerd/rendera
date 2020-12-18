@@ -60,3 +60,5 @@ rm -rf disk1.img
 dd if=/dev/zero of=disk1.img count=1440 bs=1k
 mkfs.msdos disk1.img
 mcopy -i ./disk1.img rendera.exe ::/
+rm Rendera.7z
+7z a -t7z -m0=lzma -mx=9 -mlc=2 -mmc=1000000000 -mfb=273 -ms=on Rendera.7z rendera.exe
