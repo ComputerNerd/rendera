@@ -55,9 +55,7 @@ cd ../../
 make clean
 make -j16
 
-cp /usr/i386-mingw32crt/bin/libgcc_s_dw2-1.dll .
-cp /usr/i386-mingw32crt/bin/libstdc++-6.dll .
-i386-mingw32crt-strip *.exe *.dll
+i386-mingw32crt-strip *.exe
 rm -rf disk1.img rend.zip
 advzip -4 -a rend.zip rendera.exe
 dd if=/dev/zero of=disk1.img count=1440 bs=1k
