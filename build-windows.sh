@@ -1,19 +1,10 @@
 #!/bin/bash
 
-# Libunicows for Windows 9x compatibility.
-# If Windows 9x compatibility is not needed then this can be skipped.
-cd libunicows/src/
-make -f makefile.crossmingw32
-cd ../../
-
-UNICOWSLIBFOLDER=`readlink -f ./libunicows/lib/mingw32`
-
-# FLTK 1.3.x
+# FLTK 1.1.x
 rm -rf fltk-install
 mkdir -p fltk-install
 FLTKINSTALLFOLDER=`readlink -f ./fltk-install`
 cd fltk
-patch -p0 < ../removecomct32.patch
 rm -rf build
 mkdir -p build
 cd build
@@ -21,10 +12,9 @@ cd build
 # The flto-partition option may not be needed in future versions of GCC, however with GCC 10.2 and Binutils 2.34 I sometimes receive errors while building if I don't disable LTO partitioning.
 LTO_FLAGS="-fPIE -flto -fuse-linker-plugin -flto-partition=none -fno-rtti -Os -Wl,--gc-sections"
 CFLAGS="-DNDEBUG -DPNG_NO_CONSOLE_IO -DNO_TRACK_MOUSE"
-UNICOWSLINK="-L$UNICOWSLIBFOLDER"
 
-LINKER_FLAGS="$LTO_FLAGS $UNICOWSLINK"
-STANDARD_LIBS=" -lunicows -lkernel32 -luser32 -lcomctl32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
+LINKER_FLAGS="$LTO_FLAGS"
+STANDARD_LIBS=" -lkernel32 -luser32 -lcomctl32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32"
 
 cmake -DOPTION_USE_GL=OFF \
 	-DOPTION_USE_SYSTEM_LIBJPEG=OFF \
