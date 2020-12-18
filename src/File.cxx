@@ -271,12 +271,13 @@ void File::load(Fl_Widget *, void *)
 
   loadFile(fc.filename());
 #else
-  FC_CLASS_NAME fc(NULL, "PNG Image\t*.png\n"
-            "JPEG Image\t*.{jpg,jpeg}\n"
-            "Bitmap Image\t*.bmp\n"
-            "Targa Image\t*.tga\n", Fl_File_Chooser::SINGLE, "Load Image");
+  FC_CLASS_NAME fc(NULL, "PNG Image (*.png)\tJPEG Image (*.{jpg,jpeg})\tBitmap Image (*.bmp)\tTarga Image (*.tga)", Fl_File_Chooser::SINGLE, "Load Image");
   fc.directory(load_dir);
+
   fc.show();
+  while (fc.shown())
+    Fl::wait();
+
   if (fc.count() > 0) {
     getDirectory(load_dir, fc.value());
     loadFile(fc.value());
@@ -986,8 +987,10 @@ void File::save(Fl_Widget *, void *)
             "JPEG Image\t*.jpg\n"
             "Bitmap Image\t*.bmp\n"
             "Targa Image\t*.tga\n", Fl_File_Chooser::CREATE, "Save Image");
-  fc.directory(save_dir);
+  //fc.directory(save_dir);
   fc.show();
+  while (fc.shown())
+    Fl::wait();
 
   if (fc.count() <= 0)
     return;
@@ -1547,8 +1550,10 @@ void File::loadPalette()
   strncpy(fn, fc.filename(), sizeof(fn));
 #else
   FC_CLASS_NAME fc(NULL, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::SINGLE, "Load Palette");
-  fc.directory(pal_load_dir);
+  //fc.directory(pal_load_dir);
   fc.show();
+  while (fc.shown())
+    Fl::wait();
   if (fc.count() <= 0)
     return;
   getDirectory(pal_load_dir, fc.value());
@@ -1603,8 +1608,10 @@ void File::savePalette()
   strncpy(fn, fc.filename(), sizeof(fn));
 #else
   FC_CLASS_NAME fc(NULL, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::CREATE, "Save Palette");
-  fc.directory(pal_save_dir);
+  //fc.directory(pal_save_dir);
   fc.show();
+  while (fc.shown())
+    Fl::wait();
   if (fc.count() <= 0)
     return;
   strncpy(fn, fc.value(), sizeof(fn));
