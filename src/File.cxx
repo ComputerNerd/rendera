@@ -983,10 +983,7 @@ void File::save(Fl_Widget *, void *)
   }
   std::strncpy(fn, fc.filename(), sizeof(fn));
 #else
-  FC_CLASS_NAME fc(NULL, "PNG Image\t*.png\n"
-            "JPEG Image\t*.jpg\n"
-            "Bitmap Image\t*.bmp\n"
-            "Targa Image\t*.tga\n", Fl_File_Chooser::CREATE, "Save Image");
+  FC_CLASS_NAME fc(NULL, "PNG Image (*.png)\tJPEG Image (*.{jpg,jpeg})\tBitmap Image (*.bmp)\tTarga Image (*.tga)", Fl_File_Chooser::CREATE, "Save Image");
   //fc.directory(save_dir);
   fc.show();
   while (fc.shown())
@@ -1549,7 +1546,7 @@ void File::loadPalette()
   }
   strncpy(fn, fc.filename(), sizeof(fn));
 #else
-  FC_CLASS_NAME fc(NULL, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::SINGLE, "Load Palette");
+  FC_CLASS_NAME fc(NULL, "GIMP Palette (*.gpl)", Fl_File_Chooser::SINGLE, "Load Palette");
   //fc.directory(pal_load_dir);
   fc.show();
   while (fc.shown())
@@ -1607,7 +1604,7 @@ void File::savePalette()
   }
   strncpy(fn, fc.filename(), sizeof(fn));
 #else
-  FC_CLASS_NAME fc(NULL, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::CREATE, "Save Palette");
+  FC_CLASS_NAME fc(NULL, "GIMP Palette (*.gpl)", Fl_File_Chooser::CREATE, "Save Palette");
   //fc.directory(pal_save_dir);
   fc.show();
   while (fc.shown())
