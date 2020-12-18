@@ -16,7 +16,7 @@ SRC_DIR=src
 ifeq ($(PLATFORM),linux)
 INCLUDE=-I$(SRC_DIR)
 else
-INCLUDE=-I$(SRC_DIR) -Ifltk-install/include -Ifltk-install/include/FL/images
+INCLUDE=-I$(SRC_DIR) -Ifltk-install/include -Ifltk-install/include/FL/images -Ifltk/png -Ifltk/zlib -Ifltk/jpeg
 endif
 ifeq ($(PLATFORM),linux)
 	LIBS=$(shell fltk-config --use-images --ldflags)
