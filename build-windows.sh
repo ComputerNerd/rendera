@@ -8,7 +8,6 @@ cd fltk
 rm -rf build
 mkdir -p build
 cd build
-# This assumes you have FLTK 1.3 installed. If not compile FLTK for the host and specify FLUID_PATH.
 # The flto-partition option may not be needed in future versions of GCC, however with GCC 10.2 and Binutils 2.34 I sometimes receive errors while building if I don't disable LTO partitioning.
 LTO_FLAGS="-fPIE -flto -fuse-linker-plugin -flto-partition=none -fno-rtti -Os -Wl,--gc-sections"
 CFLAGS="-DNDEBUG -DPNG_NO_CONSOLE_IO -DNO_TRACK_MOUSE"
