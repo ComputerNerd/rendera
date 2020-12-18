@@ -19,8 +19,8 @@ mkdir -p build
 cd build
 # This assumes you have FLTK 1.3 installed. If not compile FLTK for the host and specify FLUID_PATH.
 # The flto-partition option may not be needed in future versions of GCC, however with GCC 10.2 and Binutils 2.34 I sometimes receive errors while building if I don't disable LTO partitioning.
-LTO_FLAGS="-fPIE -flto -fuse-linker-plugin -flto-partition=none -DNO_TRACK_MOUSE -fno-rtti -Os -Wl,--gc-sections"
-CFLAGS="-DNDEBUG"
+LTO_FLAGS="-fPIE -flto -fuse-linker-plugin -flto-partition=none -fno-rtti -Os -Wl,--gc-sections"
+CFLAGS="-DNDEBUG -DPNG_NO_CONSOLE_IO -DNO_TRACK_MOUSE"
 UNICOWSLINK="-L$UNICOWSLIBFOLDER"
 
 LINKER_FLAGS="$LTO_FLAGS $UNICOWSLINK"
@@ -38,9 +38,7 @@ cmake -DOPTION_USE_GL=OFF \
 	-DCMAKE_AR=/usr/bin/i386-mingw32crt-gcc-ar \
 	-DCMAKE_RANLIB=/usr/bin/i386-mingw32crt-gcc-ranlib \
 	-DCMAKE_NM=/usr/bin/i386-mingw32crt-gcc-nm \
-	-DOPTION_BUILD_EXAMPLES=OFF \
 	-DCMAKE_BUILD_TYPE=MinSizeRel \
-	-DOPTION_BUILD_SHARED_LIBS=OFF \
 	-DCMAKE_C_FLAGS="$CFLAGS $LTO_FLAGS" \
 	-DCMAKE_CXX_FLAGS="$CFLAGS $LTO_FLAGS" \
 	-DCMAKE_CXX_FLAGS="$CFLAGS $LTO_FLAGS" \
@@ -54,13 +52,18 @@ cmake -DOPTION_USE_GL=OFF \
 	-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=BOTH \
 	-DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY \
 	-DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY \
+	-DUSE_OPENGL=OFF \
+	-DBUILD_TESTING=OFF \
+	-DBUILD_EXAMPLES=OFF \
+	-DBUILD_SHARED_LIBS=OFF \
+	-DMINGW=ON \
 	..
 make -j16
 make install
 
 
 cd ../../
-#make clean
+make clean
 make -j16
 
 cp /usr/i386-mingw32crt/bin/libgcc_s_dw2-1.dll .
