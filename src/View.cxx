@@ -45,13 +45,14 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 #if defined WIN32
   #include <windows.h>
+  #define USE_GDI_BITMAP 1
 #endif
 
 namespace
 {
   #if defined linux
     XImage *ximage;
-  #elif defined WIN32
+  #elif defined(WIN32) && defined(USE_GDI_BITMAP)
     BITMAPINFO *bi;
     HDC buffer_dc;
     HBITMAP hbuffer;
@@ -101,7 +102,7 @@ namespace
   {
     #if defined linux
       XPutImage(fl_display, fl_window, fl_gc, ximage, sx, sy, dx, dy, w, h);
-    #elif defined WIN32
+    #elif defined(WIN32) && defined(USE_GDI_BITMAP)
       BitBlt(fl_gc, dx, dy, w, h, buffer_dc, sx, sy, SRCCOPY);
     #else
       fl_push_clip(dx, dy, w, h);
@@ -142,11 +143,11 @@ View::View(Fl_Group *g, int x, int y, int w, int h, const char *label)
 
     ximage = XCreateImage(fl_display, fl_visual->visual, 24, ZPixmap, 0,
                           (char *)backbuf->data, backbuf->w, backbuf->h, 32, 0);
-  #elif defined WIN32
+  #elif defined(WIN32) && defined(USE_GDI_BITMAP)
     bgr_order = true;
     buffer_dc = CreateCompatibleDC(fl_gc);
     if (buffer_dc == NULL) {
-      MessageBoxA(NULL, "CreateCompatibleDC Failed", "View::View", MB_OK | MB_ICONERROR);
+      MessageBoxA(NULL, "CreateCompatibleDC failed", "View::View", MB_OK | MB_ICONERROR);
       std::exit(1);
     }
     
