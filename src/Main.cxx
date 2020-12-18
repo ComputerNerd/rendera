@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 #include <getopt.h>
 #include <iostream>
+#include <cstring>
 
 #include <FL/Fl_Shared_Image.H>
 
@@ -125,12 +126,12 @@ int main(int argc, char *argv[])
         switch(option_index)
         {
           case OPTION_THEME:
-            if(strcmp(optarg, "dark") == 0)
+            if(std::strcmp(optarg, "dark") == 0)
             {
               setDarkTheme();
               break;
             }
-            if(strcmp(optarg, "light") == 0)
+            if(std::strcmp(optarg, "light") == 0)
             {
               setLightTheme();
               break;

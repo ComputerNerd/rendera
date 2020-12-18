@@ -19,6 +19,13 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 */
 
 #include <FL/fl_draw.H>
+#if (FL_MAJOR_VERSION > 1) || (FL_MINOR_VERSION >= 3)
+#include <FL/platform.H>
+#else
+#include <FL/x.H>
+#endif
+
+#include <cstring>
 
 #include "Bitmap.H"
 #include "Blend.H"
@@ -132,7 +139,7 @@ void Text::move(View *view)
     int face = Gui::getFontFace();
     int size = Gui::getFontSize();
     const char *s = Gui::getTextInput();
-    if(strlen(s) > 250)
+    if(std::strlen(s) > 250)
       return;
 
     state = 1;
@@ -144,7 +151,7 @@ void Text::move(View *view)
 
     unsigned int i = 0;
 
-    for( ; i <= strlen(s); i++)
+    for( ; i <= std::strlen(s); i++)
       string[i + 1] = s[i];
 
     string[i++] = ' ';

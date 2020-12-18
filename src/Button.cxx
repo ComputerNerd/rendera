@@ -21,6 +21,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #include <FL/fl_ask.H>
 #include <FL/fl_draw.H>
 
+#include <cstdlib>
+
 #include "Button.H"
 #include "File.H"
 #include "Project.H"
@@ -38,10 +40,8 @@ Button::Button(Fl_Group *g, int x, int y, int w, int h,
 
   if(!(bitmap = File::loadPngFromArray(array, 0)))
   {
-    fl_message_title("Error");
-//    fl_message("Could not load %s, exiting.", filename);
-    fl_message("Could not load image.");
-    exit(1);
+    fl_alert("Could not load image.");
+    std::exit(1);
   }
 
   image = new Fl_RGB_Image((unsigned char *)bitmap->data, bitmap->w, bitmap->h, 4, 0);

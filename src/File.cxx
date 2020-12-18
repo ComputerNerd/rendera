@@ -39,10 +39,31 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 // this must be included after pnglib
 #include <setjmp.h>
 
+#if (FL_MAJOR_VERSION > 1) || (FL_MINOR_VERSION >= 3)
+	#ifndef USE_NATIVE_FILE_CHOOSER
+	#define USE_NATIVE_FILE_CHOOSER 1
+	#endif
+#else
+	#define USE_NATIVE_FILE_CHOOSER 0
+#endif
+
+#if USE_NATIVE_FILE_CHOOSER
+#define FC_CLASS_NAME Fl_Native_File_Chooser
+#else
+#define FC_CLASS_NAME Fl_File_Chooser
+#endif
+
+
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Image.H>
+#if USE_NATIVE_FILE_CHOOSER
 #include <FL/Fl_Native_File_Chooser.H>
+#else
+#include <FL/Fl_File_Chooser.H>
+#endif
+
 #include <FL/fl_ask.H>
+#include <FL/filename.H>
 
 #include "Bitmap.H"
 #include "Dialog.H"
@@ -225,16 +246,16 @@ namespace
 // display file loading dialog
 void File::load(Fl_Widget *, void *)
 {
-  Fl_Native_File_Chooser fc;
+#if USE_NATIVE_FILE_CHOOSER
+  FC_CLASS_NAME fc;
   fc.title("Load Image");
+  fc.directory(load_dir);
+  fc.options(Fl_Native_File_Chooser::PREVIEW);
+  fc.type(Fl_Native_File_Chooser::BROWSE_FILE);
   fc.filter("PNG Image\t*.png\n"
             "JPEG Image\t*.{jpg,jpeg}\n"
             "Bitmap Image\t*.bmp\n"
             "Targa Image\t*.tga\n");
-  fc.options(Fl_Native_File_Chooser::PREVIEW);
-  fc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-  fc.directory(load_dir);
-
   switch(fc.show())
   {
     case -1:
@@ -247,6 +268,17 @@ void File::load(Fl_Widget *, void *)
   }
 
   loadFile(fc.filename());
+#else
+  FC_CLASS_NAME fc(load_dir, "PNG Image\t*.png\n"
+            "JPEG Image\t*.{jpg,jpeg}\n"
+            "Bitmap Image\t*.bmp\n"
+            "Targa Image\t*.tga\n", Fl_File_Chooser::SINGLE, "Load Image");
+  fc.show();
+  if (fc.count() > 0) {
+    loadFile(fc.value());
+  }
+#endif
+
 }
 
 // load a file
@@ -922,13 +954,14 @@ Bitmap *File::loadPngFromArray(const unsigned char *array, int overscroll)
 
 void File::save(Fl_Widget *, void *)
 {
-  Fl_Native_File_Chooser fc;
+  char fn[FL_PATH_MAX];
+#if USE_NATIVE_FILE_CHOOSER
+  FC_CLASS_NAME fc;
   fc.title("Save Image");
   fc.filter("PNG Image\t*.png\n"
             "JPEG Image\t*.jpg\n"
             "Bitmap Image\t*.bmp\n"
             "Targa Image\t*.tga\n");
-//            "Java Array\t*.java\n");
   fc.options(Fl_Native_File_Chooser::PREVIEW);
   fc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
   fc.directory(save_dir);
@@ -943,9 +976,20 @@ void File::save(Fl_Widget *, void *)
       getDirectory(save_dir, fc.filename());
       break;
   }
+  std::strncpy(fn, fc.filename(), sizeof(fn));
+#else
+  FC_CLASS_NAME fc(save_dir, "PNG Image\t*.png\n"
+            "JPEG Image\t*.jpg\n"
+            "Bitmap Image\t*.bmp\n"
+            "Targa Image\t*.tga\n", Fl_File_Chooser::CREATE, "Save Image");
+  fc.show();
 
-  char fn[256];
-  strcpy(fn, fc.filename());
+  if (fc.count() <= 0)
+    return;
+  std::strncpy(fn, fc.value(), sizeof(fn));
+  getDirectory(save_dir, fc.value());
+#endif
+
   int ext = fc.filter_value();
   fl_filename_setext(fn, sizeof(fn), ext_string[ext]);
 
@@ -1476,7 +1520,9 @@ Fl_Image *File::previewGimpPalette(const char *fn, unsigned char *header, int)
 // load a palette using the file chooser
 void File::loadPalette()
 {
-  Fl_Native_File_Chooser fc;
+  char fn[FL_PATH_MAX];
+#if USE_NATIVE_FILE_CHOOSER
+  FC_CLASS_NAME fc;
   fc.title("Load Palette");
   fc.filter("GIMP Palette\t*.gpl\n");
   fc.options(Fl_Native_File_Chooser::PREVIEW);
@@ -1493,9 +1539,16 @@ void File::loadPalette()
       getDirectory(pal_load_dir, fc.filename());
       break;
   }
+  strncpy(fn, fc.filename(), sizeof(fn));
+#else
+  FC_CLASS_NAME fc(pal_load_dir, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::SINGLE, "Load Palette");
+  fc.show();
+  if (fc.count() <= 0)
+    return;
+  getDirectory(pal_load_dir, fc.value());
+  strncpy(fn, fc.value(), sizeof(fn));
+#endif
 
-  char fn[256];
-  strcpy(fn, fc.filename());
 
   FileSP in(fn, "r");
   if(!in.get())
@@ -1522,7 +1575,9 @@ void File::loadPalette()
 // save a palette using the file chooser
 void File::savePalette()
 {
-  Fl_Native_File_Chooser fc;
+  char fn[FL_PATH_MAX];
+#if USE_NATIVE_FILE_CHOOSER
+  FC_CLASS_NAME fc;
   fc.title("Save Palette");
   fc.filter("GIMP Palette\t*.gpl\n");
   fc.options(Fl_Native_File_Chooser::PREVIEW);
@@ -1539,9 +1594,15 @@ void File::savePalette()
       getDirectory(pal_save_dir, fc.filename());
       break;
   }
+  strncpy(fn, fc.filename(), sizeof(fn));
+#else
+  FC_CLASS_NAME fc(pal_save_dir, "GIMP Palette\t*.gpl\n", Fl_File_Chooser::CREATE, "Save Palette");
+  fc.show();
+  if (fc.count() <= 0)
+    return;
+  strncpy(fn, fc.value(), sizeof(fn));
+#endif
 
-  char fn[256];
-  strcpy(fn, fc.filename());
   fl_filename_setext(fn, sizeof(fn), ".gpl");
 
   if(fileExists(fn))

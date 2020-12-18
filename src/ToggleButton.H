@@ -22,10 +22,10 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 #define TOGGLE_BUTTON_H
 
 #include <FL/Fl_Button.H>
+#include <FL/Fl_RGB_Image.H>
 
 class Bitmap;
 class Fl_Group;
-class Fl_RGB_Image;
 
 class ToggleButton : public Fl_Button
 {

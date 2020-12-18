@@ -22,7 +22,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 #include <FL/fl_draw.H>
 #include <FL/Fl_Window.H>
+#if (FL_MAJOR_VERSION > 1) || (FL_MINOR_VERSION >= 3)
 #include <FL/platform.H>
+#else
+#include <FL/x.H>
+#endif
 
 #include "Bitmap.H"
 #include "Blend.H"

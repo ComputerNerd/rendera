@@ -45,9 +45,7 @@ Widget::Widget(Fl_Group *g, int x, int y, int w, int h,
 
   if(!(bitmap = File::loadPngFromArray(array, 0)))
   {
-    fl_message_title("Error");
-//    fl_message("Could not load %s, exiting.", filename);
-    fl_message("Could not load image.");
+    fl_alert("Could not load image.");
     exit(1);
   }
 
