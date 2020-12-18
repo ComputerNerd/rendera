@@ -141,7 +141,7 @@ inline int scaleVal(const int &a, const int &b)
 // get an FLTK color
 inline int getFltkColor(const int &c)
 {
-  return (Fl::get_color(c) >> 8) | 0xFF000000;
+  return (Fl::get_color((Fl_Color)c) >> 8) | 0xFF000000;
 }
 
 // 3D quadratic distance
