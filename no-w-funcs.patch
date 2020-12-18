@@ -1,0 +1,264 @@
+--- src/fl_utf8.cxx.bak	2020-12-15 02:30:33.520791428 -0600
++++ src/fl_utf8.cxx	2020-12-17 18:23:55.238257726 -0600
+@@ -420,31 +420,9 @@
+ 
+ char *fl_getenv(const char* v) {
+ 
+-#if defined (WIN32) && !defined(__CYGWIN__)
+-
+-  size_t l =  strlen(v);
+-  unsigned wn = fl_utf8toUtf16(v, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(v, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  xchar *ret = _wgetenv(wbuf);
+-  static char *buf = NULL;
+-  if (ret) {
+-    l = (unsigned) wcslen(ret);
+-    wn = fl_utf8fromwc(NULL, 0, ret, (unsigned) l) + 1; // query length
+-    buf = (char*) realloc(buf, wn);
+-    wn = fl_utf8fromwc(buf, wn, ret, (unsigned) l); // convert string
+-    buf[wn] = 0;
+-    return buf;
+-  } else {
+-    return NULL;
+-  }
+-
+-#else
+ 
+   return getenv(v);
+ 
+-#endif
+ 
+ } // fl_getenv()
+ 
+@@ -466,22 +444,10 @@
+   pmode = va_arg (ap, int);
+   va_end(ap);
+ 
+-#if defined (WIN32) && !defined(__CYGWIN__)
+-
+-  unsigned l = (unsigned) strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  if (pmode == -1) return _wopen(wbuf, oflags);
+-  else return _wopen(wbuf, oflags, pmode);
+-
+-#else
+ 
+   if (pmode == -1) return open(f, oflags);
+   else return open(f, oflags, pmode);
+ 
+-#endif
+ 
+ } // fl_open()
+ 
+@@ -497,25 +463,9 @@
+ */
+ FILE *fl_fopen(const char* f, const char *mode) {
+ 
+-#if  defined (WIN32) && !defined(__CYGWIN__)
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  l = strlen(mode);
+-  wn = fl_utf8toUtf16(mode, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf1 = (xchar*)realloc(wbuf1, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(mode, (unsigned) l, (unsigned short *)wbuf1, wn); // Convert string
+-  wbuf1[wn] = 0;
+-  return _wfopen(wbuf, wbuf1);
+-
+-#else
+ 
+   return fopen(f, mode);
+ 
+-#endif
+ 
+ } // fl_fopen()
+ 
+@@ -608,20 +558,9 @@
+ */
+ int fl_chmod(const char* f, int mode) {
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _wchmod(wbuf, mode);
+-
+-#else // other platforms
+ 
+   return chmod(f, mode);
+ 
+-#endif
+ 
+ } // fl_chmod()
+ 
+@@ -638,20 +577,9 @@
+ */
+ int fl_access(const char* f, int mode) {
+ 
+-#if defined (WIN32) && !defined(__CYGWIN__) // Windows
+ 
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _waccess(wbuf, mode);
+-
+-#else // other platforms
+-
+-  return access(f, mode);
++  return _access(f, mode);
+ 
+-#endif
+ 
+ } // fl_access()
+ 
+@@ -668,20 +596,9 @@
+ */
+ int fl_stat(const char* f, struct stat *b) {
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _wstat(wbuf, (struct _stat*)b);
+-
+-#else // other platforms
+ 
+   return stat(f, b);
+ 
+-#endif
+ 
+ } // fl_stat()
+ 
+@@ -702,26 +619,9 @@
+     b = (char*) malloc(l+1);
+   }
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  static xchar *wbuf = NULL;
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar) * (l+1));
+-  xchar *ret = _wgetcwd(wbuf, l);
+-  if (ret) {
+-    unsigned dstlen = l;
+-    l = (int) wcslen(wbuf);
+-    dstlen = fl_utf8fromwc(b, dstlen, wbuf, (unsigned) l);
+-    b[dstlen] = 0;
+-    return b;
+-  } else {
+-    return NULL;
+-  }
+-
+-#else // other platforms
+ 
+   return getcwd(b, l);
+ 
+-#endif
+ 
+ } // fl_getcwd()
+ 
+@@ -737,20 +637,9 @@
+ */
+ int fl_unlink(const char* f) {
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _wunlink(wbuf);
+-
+-#else // other platforms
+ 
+   return unlink(f);
+ 
+-#endif
+ 
+ } // fl_unlink()
+ 
+@@ -767,20 +656,9 @@
+ */
+ int fl_mkdir(const char* f, int mode) {
+ 
+-#if defined(WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _wmkdir(wbuf);
+ 
+-#else // other platforms
++  return _mkdir(f);
+ 
+-  return mkdir(f, mode);
+-
+-#endif
+ 
+ } // fl_mkdir()
+ 
+@@ -796,20 +674,9 @@
+ */
+ int fl_rmdir(const char* f) {
+ 
+-#if defined (WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  return _wrmdir(wbuf);
+-
+-#else
+ 
+   return rmdir(f);
+ 
+-#endif
+ 
+ } // fl_rmdir()
+ 
+@@ -826,25 +693,9 @@
+ */
+ int fl_rename(const char* f, const char *n) {
+ 
+-#if defined (WIN32) && !defined(__CYGWIN__) // Windows
+-
+-  size_t l = strlen(f);
+-  unsigned wn = fl_utf8toUtf16(f, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf = (xchar*)realloc(wbuf, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(f, (unsigned) l, (unsigned short *)wbuf, wn); // Convert string
+-  wbuf[wn] = 0;
+-  l = strlen(n);
+-  wn = fl_utf8toUtf16(n, (unsigned) l, NULL, 0) + 1; // Query length
+-  wbuf1 = (xchar*)realloc(wbuf1, sizeof(xchar)*wn);
+-  wn = fl_utf8toUtf16(n, (unsigned) l, (unsigned short *)wbuf1, wn); // Convert string
+-  wbuf1[wn] = 0;
+-  return _wrename(wbuf, wbuf1);
+-
+-#else
+ 
+   return rename(f, n);
+ 
+-#endif
+ 
+ } // fl_rename()
+ 

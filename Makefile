@@ -21,7 +21,7 @@ endif
 ifeq ($(PLATFORM),linux)
 	LIBS=$(shell fltk-config --use-images --ldflags)
 else
-	LIBS=-Lfltk-install/lib -lfltk_images_SHARED -lfltk_SHARED -lfltk_png_SHARED -lfltk_jpeg_SHARED -lfltk_z_SHARED 
+	LIBS=-Lfltk-install/lib -lfltk_images -lfltk -lfltk_png -lfltk_jpeg -lfltk_z
 endif
 
 ifeq ($(PLATFORM),linux)
@@ -32,11 +32,11 @@ ifeq ($(PLATFORM),linux)
 endif
 
 ifeq ($(PLATFORM),mingw32)
-  HOST=i586-w64-mingw32
+  HOST=i386-mingw32crt
   CXX=$(HOST)-g++
-  LTOFLAGS=-Os -flto -fuse-linker-plugin -flto-partition=none
+  LTOFLAGS=-Os -flto -fuse-linker-plugin -flto-partition=none -fPIE
   CXXFLAGS=$(LTOFLAGS) -fno-rtti -DPACKAGE_STRING=\"$(NAME)$(VERSION)\" $(INCLUDE)
-  LIBS+=-Wl,--gc-sections -Wl,--enable-reloc-section -Llibunicows/lib/mingw32 -lunicows -mwindows -lgdi32 -luuid -lole32 -lcomctl32 -lcomdlg32 $(LTOFLAGS)
+  LIBS+=-Wl,--gc-sections -Wl,--enable-reloc-section -Wl,--dynamicbase,--export-all-symbols -Llibunicows/lib/mingw32 -lunicows -mwindows -lgdi32 -luuid -lole32 -lcomctl32 -lcomdlg32 -lmingwex -lmingw32 -Wl,-verbose $(LTOFLAGS)
   EXE=rendera.exe
 endif
 
