@@ -59,7 +59,7 @@ cp /usr/i386-mingw32crt/bin/libgcc_s_dw2-1.dll .
 cp /usr/i386-mingw32crt/bin/libstdc++-6.dll .
 i386-mingw32crt-strip *.exe *.dll
 rm -rf disk1.img rend.zip
-advzip -4 -a rend.zip rendera.exe unicows.dll
+advzip -4 -a rend.zip rendera.exe
 dd if=/dev/zero of=disk1.img count=1440 bs=1k
 mkfs.msdos disk1.img
 mcopy -i ./disk1.img rend.zip ::/
